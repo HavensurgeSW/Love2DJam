@@ -3,11 +3,14 @@ function love.load()
   --require "circle"
   --circle1 = Circle(200,200,5,300)
 
+  radius = 5
+  speed = 150
+
   maxBodyPieces = 10
 
   listOfCircle = {}
 
-  createCircle(5)
+  createCircle(radius)
 
   playerX = 0
   playerY = 0
@@ -16,23 +19,23 @@ end
 
 function love.update(dt)
   if love.keyboard.isDown("right") then
-      playerX = 300
+      playerX = speed
       playerY = 0
     end
   
     if love.keyboard.isDown("left") then
-      playerX = -300
+      playerX = -speed
       playerY = 0
     end
     
     if love.keyboard.isDown("down") then
       playerX = 0
-      playerY = 300
+      playerY = speed
     end
     
     if love.keyboard.isDown("up") then
       playerX = 0
-      playerY = -300
+      playerY = -speed
     end
   
   for i = maxBodyPieces-1, 1, -1 do
@@ -48,11 +51,6 @@ function love.draw()
   for i = 0, maxBodyPieces,1 do
     love.graphics.circle("line", listOfCircle[i].x, listOfCircle[i].y, listOfCircle[i].radius, 18)
   end
-    -- for index, value in ipairs(listOfCircle) do
-    --   love.graphics.circle("line", value.x, value.y, value.radius, 18)
-    -- end
-
-    
 end
 
 function createCircle(radius)
@@ -66,5 +64,5 @@ function createCircle(radius)
 
     listOfCircle[i] = circle;
   end
-  
+
 end
