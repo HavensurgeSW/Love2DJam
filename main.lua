@@ -1,6 +1,11 @@
-
-
 function love.load()
+  Object = require "classic"
+  require "circle"
+
+  circle1 = Circle()
+
+  print(circle1.test)
+
   playerX = 0
   playerY = 0
   move = false
