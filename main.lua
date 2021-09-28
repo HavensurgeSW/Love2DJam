@@ -1,16 +1,15 @@
 function love.load()
-  --Object = require "classic"
-  --require "circle"
-  --circle1 = Circle(200,200,5,300)
 
-  radius = 5
-  speed = 150
+  mode = "fill"
+  die = false
+  size = 5
+  speed = 100
 
-  maxBodyPieces = 10
+  maxBodyPieces = 100
 
-  listOfCircle = {}
+  listOfRect = {}
 
-  createCircle(radius)
+  createRect(size)
 
   playerX = 0
   playerY = 0
@@ -18,51 +17,90 @@ function love.load()
 end
 
 function love.update(dt)
+  --Inputs del usuario
   if love.keyboard.isDown("right") then
-      playerX = speed
+      playerX = 1
       playerY = 0
+      move = true
     end
   
     if love.keyboard.isDown("left") then
-      playerX = -speed
+      playerX = -1
       playerY = 0
+      move = true
     end
     
     if love.keyboard.isDown("down") then
       playerX = 0
-      playerY = speed
+      playerY = 1
+      move = true
     end
     
     if love.keyboard.isDown("up") then
       playerX = 0
-      playerY = -speed
+      playerY = -1
+      move = true
     end
   
-  for i = maxBodyPieces-1, 1, -1 do
-    listOfCircle[i].x = listOfCircle[i-1].x
-    listOfCircle[i].y = listOfCircle[i-1].y
+    -- Actualizo las posiciones de cada parte del cuerpo
+  for i = maxBodyPieces, 1, -1 do
+    listOfRect[i].x = listOfRect[i-1].x
+    listOfRect[i].y = listOfRect[i-1].y
   end
+  --Al movimiento le agrego las dimensiones del cuadrado para que no collisionen apenas se mueve, pero si o si hay que dejar un espacio.
+  listOfRect[0].x = (playerX * (listOfRect[0].width * 0.7) * speed * dt) + listOfRect[0].x
+  listOfRect[0].y = (playerY * (listOfRect[0].height * 0.7) * speed * dt) + listOfRect[0].y
 
-  listOfCircle[0].x = (playerX * dt) + listOfCircle[0].x
-  listOfCircle[0].y = (playerY * dt) + listOfCircle[0].y
+  --Checkeo de colisiones
+  for i = 1, maxBodyPieces,1 do
+    if checkCollision(listOfRect[0], listOfRect[i]) and move == true then
+        die = true
+    end
+  end
 end
 
 function love.draw()
   for i = 0, maxBodyPieces,1 do
-    love.graphics.circle("line", listOfCircle[i].x, listOfCircle[i].y, listOfCircle[i].radius, 18)
+    love.graphics.rectangle(mode, listOfRect[i].x, listOfRect[i].y, listOfRect[i].width, listOfRect[i].height)
+  end
+
+  if die == true then
+    love.graphics.print("YOU LOSE!", 100,100)
   end
 end
 
-function createCircle(radius)
+--Creo el cuerpo del snake
+function createRect(size)
   
   for i = 0, maxBodyPieces,1 do
 
-    circle = {}
-    circle.x = 0
-    circle.y = 0
-    circle.radius = radius
+    rect = {}
+    rect.x = 0
+    rect.y = 0
+    rect.width = size
+    rect.height = size
 
-    listOfCircle[i] = circle;
+    listOfRect[i] = rect;
   end
 
+end
+
+--Checkea las colisiones
+function checkCollision(a, b)
+   --With locals it's common usage to use underscores instead of camelCasing
+   local a_left = a.x
+   local a_right = a.x + a.width
+   local a_top = a.y
+   local a_bottom = a.y + a.height
+
+   local b_left = b.x
+   local b_right = b.x + b.width
+   local b_top = b.y
+   local b_bottom = b.y + b.height
+
+   --Directly return this boolean value without using if-statement
+   return  a_right > b_left
+       and a_left < b_right
+       and a_bottom > b_top
+       and a_top < b_bottom
 end
