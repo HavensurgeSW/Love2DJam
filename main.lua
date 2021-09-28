@@ -1,10 +1,13 @@
 function love.load()
-  Object = require "classic"
-  require "circle"
+  --Object = require "classic"
+  --require "circle"
+  --circle1 = Circle(200,200,5,300)
+  
+  circle = {}
 
-  circle1 = Circle()
-
-  print(circle1.test)
+  circle.x = 100
+  circle.y = 100
+  circle.radius = 50
 
   playerX = 0
   playerY = 0
@@ -37,5 +40,6 @@ end
 
 function love.draw()
     love.graphics.rectangle("line", playerX, playerY, 50, 80)
+    love.graphics.circle("line", circle.x, circle.y, circle.radius, 12)
 end
 

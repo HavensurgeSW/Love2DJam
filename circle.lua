@@ -1,5 +1,6 @@
-Circle = Object.extend(Object)
+Circle = Object:extend()
 
 function Circle.new(self)
-    self.test = math.random(1, 1000)
+    self.test = math
 end
+
