@@ -4,19 +4,29 @@ function love.load()
   die = false
   size = 5
   speed = 100
+  score = 0
 
   maxBodyPieces = 100
 
   listOfRect = {}
+ 
 
   createRect(size)
+  food.x = 400
+  food.y = 300
+  food.width = size
+  food.height = size
 
   playerX = 0
   playerY = 0
   move = false
+  
+  song = love.audio.newSource("GameplayMusic.ogg", "stream")
+  
 end
 
 function love.update(dt)
+  love.audio.play(song)
   --Inputs del usuario
   if love.keyboard.isDown("right") then
       playerX = 1
@@ -43,9 +53,11 @@ function love.update(dt)
     end
   
     -- Actualizo las posiciones de cada parte del cuerpo
+    if die == false then
   for i = maxBodyPieces, 1, -1 do
     listOfRect[i].x = listOfRect[i-1].x
     listOfRect[i].y = listOfRect[i-1].y
+  end
   end
   --Al movimiento le agrego las dimensiones del cuadrado para que no collisionen apenas se mueve, pero si o si hay que dejar un espacio.
   listOfRect[0].x = (playerX * (listOfRect[0].width * 0.7) * speed * dt) + listOfRect[0].x
@@ -57,12 +69,25 @@ function love.update(dt)
         die = true
     end
   end
+  
+  if listOfRect[0].x>=800 or listOfRect[0].x< 0 then
+    die = true
+  end
+  
+  if listOfRect[0].y>=600 or listOfRect[0].y<0 then
+    die = true
+  end
+  
+
 end
+
 
 function love.draw()
   for i = 0, maxBodyPieces,1 do
     love.graphics.rectangle(mode, listOfRect[i].x, listOfRect[i].y, listOfRect[i].width, listOfRect[i].height)
   end
+  
+  love.graphics.rectangle("outline", food.x, food.y, food.width, food.height)
 
   if die == true then
     love.graphics.print("YOU LOSE!", 100,100)
