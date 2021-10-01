@@ -12,10 +12,7 @@ function love.load()
  
 
   createRect(size)
-  food.x = 400
-  food.y = 300
-  food.width = size
-  food.height = size
+  
 
   playerX = 0
   playerY = 0
@@ -73,6 +70,7 @@ function love.update(dt)
   if listOfRect[0].x>=800 or listOfRect[0].x< 0 then
     die = true
   end
+  
   
   if listOfRect[0].y>=600 or listOfRect[0].y<0 then
     die = true
