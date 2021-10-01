@@ -85,8 +85,6 @@ function love.draw()
     love.graphics.rectangle(mode, listOfRect[i].x, listOfRect[i].y, listOfRect[i].width, listOfRect[i].height)
   end
   
-  love.graphics.rectangle("outline", food.x, food.y, food.width, food.height)
-
   if die == true then
     love.graphics.print("YOU LOSE!", 100,100)
   end
@@ -110,6 +108,9 @@ end
 
 --Checkea las colisiones
 function checkCollision(a, b)
+  
+  
+  
    --With locals it's common usage to use underscores instead of camelCasing
    local a_left = a.x
    local a_right = a.x + a.width
@@ -127,3 +128,7 @@ function checkCollision(a, b)
        and a_bottom > b_top
        and a_top < b_bottom
 end
+
+function love.conf(t)
+  t.window.title = "Snake wannabe 0.4"
+  t.window.icon = "derp.png"
